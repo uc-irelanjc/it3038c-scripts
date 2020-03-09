@@ -3,7 +3,6 @@ var fs = require("fs");
 var os = require("os");
 var ip = require("ip");
 
-
 var server = http.createServer(function(req, res){
     if(req.url === "/") {
         fs.readFile("./public/index.html","UTF-8",function(err, body){
@@ -18,6 +17,9 @@ var server = http.createServer(function(req, res){
         memoryt=(os.totalmem()/1000000);
         memoryf=(os.freemem()/1000000);
         cpu=(os.cpus().length);
+        const cpum = () => [os.cpus()[0].model];
+        const osInfo = (...keys) => keys.map(key => os[key]()).join(' / ');
+        homeDir = os.homedir();
         var upDays=("Days: " + Math.floor(upTime/86400));
         var upHours=("Hours " + Math.floor(upTime % 86400/3600));
         var upMin=("Minutes: " + Math.floor(((upTime % 86400) % 36000)/60));
@@ -34,7 +36,10 @@ var server = http.createServer(function(req, res){
          <p>Server Uptime: ${upDays}, ${upHours}, ${upMin}, ${upSec}</p>
          <p>Total Memory: ${memoryt} MB</p>
          <p>Free Memory: ${memoryf} MB</p>
+         <p>Model: ${cpum()}</p>
          <p>Number of CPUs: ${cpu}</p>
+         <p>OS Info: ${osInfo('type', 'release', 'arch')}</p>
+         <p>Home Directory: ${homeDir}</p>
          </body>
          </html>
         `
